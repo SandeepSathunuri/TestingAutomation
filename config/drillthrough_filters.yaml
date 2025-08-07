@@ -1,0 +1,224 @@
+# Drillthrough Filters Configuration
+# This file contains all drillthrough filter mappings and parameters
+
+# Widget to Submenu Mapping
+drillthrough_map:
+  "Top Stores by Sales": "Love Library"
+  "Top Brands by Sales": "Routledge Publications"
+  "Top Categories by Sales": "E-Books"
+  "Top Sub Categories by Sales": "Non-Fiction"
+  "Top Products by Sales": "MATLAB"
+  "Weekly Trends": "Week1"
+
+# Store Name to ID Mapping
+store_mappings:
+  "Love Library": "717"
+  "Willis Library": "718"
+  "Healey Library": "719"
+  "Oviatt Library": "720"
+  "William T. Young Library": "721"
+  "Albertsons Library": "722"
+  "Joyner Library": "723"
+  "McWherter Library": "724"
+  "Fenwick Library": "725"
+  "Ablah Library": "726"
+  "Ralph Brown Draughon Library": "727"
+  "Rasmuson Library": "728"
+  "John C. Hodges Library": "729"
+  "Robert E. Kennedy Library": "730"
+  "Bracken Library": "731"
+  "Jerome Library": "732"
+  "J. Murrey Atkins Library": "733"
+  "Homer Babbidge Library": "734"
+  "Meriam Library": "735"
+  "Miller Nichols Library": "736"
+
+# Brand Mappings
+brand_mappings:
+  "Routledge Publications": "ROUTLEDGE"
+  "HathiTrust Digital Library": "HATHITRUST"
+  "CRC Press": "CRC"
+  "Princeton University Press": "PRINCETON"
+  "Project Gutenberg": "GUTENBERG"
+  "Secker & Warburg": "SECKER"
+  "Cengage Learning": "CENGAGE"
+  "American Mathematical Society": "AMS"
+  "McGraw-Hill Education": "MCGRAW"
+  "University of Chicago Press": "CHICAGO"
+
+# Category Mappings
+category_mappings:
+  "E-Books": "EBOOKS"
+  "Journals": "JOURNALS"
+  "Knowledge Collection": "KNOWLEDGE"
+  "Study Vault": "STUDY"
+  "Golden Pages": "GOLDEN"
+  "Archives": "ARCHIVES"
+  "Media": "MEDIA"
+
+# Sub-Category Mappings
+subcategory_mappings:
+  "Non-Fiction": "NONFICTION"
+  "Science Journals": "SCIENCE_JOURNALS"
+  "Audio Books": "AUDIOBOOKS"
+  "Fiction": "FICTION"
+  "Humanities Journals": "HUMANITIES_JOURNALS"
+  "Social Science Journals": "SOCIAL_JOURNALS"
+  "Educational Software": "EDU_SOFTWARE"
+
+# Product Mappings
+product_mappings:
+  "MATLAB": "MATLAB_SOFTWARE"
+  "SAS": "SAS_SOFTWARE"
+  "Adobe Creative Suite": "ADOBE_CREATIVE"
+  "Ansys": "ANSYS_SOFTWARE"
+  "Advanced Calculus": "ADV_CALCULUS"
+
+# Drillthrough Parameters by Target
+drillthrough_parameters:
+  # Store-based parameters
+  "Love Library":
+    year: 2024
+    month: null
+    store: "717"
+    state: null
+    channel: null
+    fromdate: null
+    todate: null
+    filter_type: "store"
+  
+  "Willis Library":
+    year: 2024
+    month: null
+    store: "718"
+    state: null
+    channel: null
+    fromdate: null
+    todate: null
+    filter_type: "store"
+  
+  # Brand-based parameters (currently not supported by SPs)
+  "Routledge Publications":
+    year: 2024
+    month: null
+    store: null
+    state: null
+    channel: null
+    fromdate: null
+    todate: null
+    filter_type: "brand"
+    note: "Brand filter not supported by current SPs"
+  
+  # Category-based parameters (currently not supported by SPs)
+  "E-Books":
+    year: 2024
+    month: null
+    store: null
+    state: null
+    channel: null
+    fromdate: null
+    todate: null
+    filter_type: "category"
+    note: "Category filter not supported by current SPs"
+  
+  # Sub-category parameters
+  "Non-Fiction":
+    year: 2024
+    month: null
+    store: null
+    state: null
+    channel: null
+    fromdate: null
+    todate: null
+    filter_type: "subcategory"
+    note: "Sub-category filter not supported by current SPs"
+  
+  # Product parameters
+  "MATLAB":
+    year: 2024
+    month: null
+    store: null
+    state: null
+    channel: null
+    fromdate: null
+    todate: null
+    filter_type: "product"
+    note: "Product filter not supported by current SPs"
+  
+  # Weekly parameters
+  "Week1":
+    year: 2024
+    month: null
+    store: null
+    state: null
+    channel: null
+    fromdate: null
+    todate: null
+    filter_type: "weekly"
+
+# Supported Filter Types
+supported_filters:
+  "Love Library": "store"
+  "Willis Library": "store"
+  "Healey Library": "store"
+  "Oviatt Library": "store"
+  "William T. Young Library": "store"
+  "Albertsons Library": "store"
+  "Joyner Library": "store"
+  "McWherter Library": "store"
+  "Fenwick Library": "store"
+  "Ablah Library": "store"
+  "Ralph Brown Draughon Library": "store"
+  "Rasmuson Library": "store"
+  "John C. Hodges Library": "store"
+  "Robert E. Kennedy Library": "store"
+  "Bracken Library": "store"
+  "Jerome Library": "store"
+  "J. Murrey Atkins Library": "store"
+  "Homer Babbidge Library": "store"
+  "Meriam Library": "store"
+  "Miller Nichols Library": "store"
+  "Routledge Publications": "none"
+  "E-Books": "none"
+  "Non-Fiction": "none"
+  "MATLAB": "none"
+  "Week1": "weekly"
+
+# Default Parameters
+default_parameters:
+  year: 2024
+  month: null
+  store: null
+  state: null
+  channel: null
+  fromdate: null
+  todate: null
+
+# Parameter Validation Rules
+parameter_validation:
+  year:
+    type: "integer"
+    required: true
+    min: 2020
+    max: 2030
+  
+  month:
+    type: "integer"
+    required: false
+    min: 1
+    max: 12
+  
+  store:
+    type: "string"
+    required: false
+    max_length: 10
+  
+  state:
+    type: "string"
+    required: false
+    max_length: 50
+  
+  channel:
+    type: "string"
+    required: false
+    max_length: 50

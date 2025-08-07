@@ -1,0 +1,229 @@
+# Dynamic Comparison Engine Configuration
+# This file contains configuration for the dynamic comparison engine
+
+# Pattern Recognition Configuration
+pattern_recognition:
+  # Direct name matching patterns (highest priority)
+  direct_mappings:
+    store_patterns:
+      - pattern: "store sales"
+        with_targets: "SP_StorewiseActualVsTarget_Vertical_SortedByActual"
+        without_targets: "SP_TopStoresbySales"
+      - pattern: "top stores"
+        sp: "SP_TopStoresbySales"
+    
+    brand_patterns:
+      - pattern: "brands"
+        sp: "SP_TopBrandsBySales"
+      - pattern: "top brands"
+        sp: "SP_TopBrandsBySales"
+    
+    category_patterns:
+      - pattern: "categories"
+        sp: "SP_TopCategoriesBySaleswidget"
+      - pattern: "top categories"
+        sp: "SP_TopCategoriesBySaleswidget"
+    
+    subcategory_patterns:
+      - pattern: "sub categories"
+        sp: "SP_TopSubCategoriesBySales"
+    
+    product_patterns:
+      - pattern: "products"
+        sp: "SP_TopProductsBySales"
+      - pattern: "top products"
+        sp: "SP_TopProductsBySales"
+    
+    trend_patterns:
+      - pattern: "weekly trends"
+        sp: "SP_WeeklyTrendswidget"
+      - pattern: "weekly"
+        sp: "SP_WeeklyTrendswidget"
+      - pattern: "sales trends"
+        sp: "SP_SalesTrend"
+      - pattern: "month"
+        sp: "SP_SalesTrend"
+
+# Pattern Matching Scores
+scoring_system:
+  direct_name_match: 0.8
+  pattern_match: 0.4
+  sp_specific_boost:
+    store_with_targets: 0.9
+    store_without_targets: 0.5
+    brand_match: 0.5
+    category_main: 0.5
+    subcategory_match: 0.7
+    product_match: 0.5
+    weekly_trends_exact: 0.9
+    weekly_trends_general: 0.7
+    weekly_comparison_fallback: 0.6
+    sales_trends_non_weekly: 0.5
+  
+  data_volume_bonus: 0.1
+  column_compatibility_bonus: 0.1
+  minimum_confidence_threshold: 0.3
+
+# Data Pattern Detection
+data_patterns:
+  time_based:
+    monthly_data:
+      keywords: ["month", "monthly"]
+      priority: 1
+    
+    weekly_data:
+      keywords: ["week", "weekly"]
+      priority: 2
+    
+    weekday_weekend_data:
+      keywords: ["weekday", "weekend"]
+      priority: 3
+      identifier_values: ["WEEKDAY SALES", "WEEKEND SALES"]
+  
+  entity_based:
+    product_data:
+      keywords: ["product"]
+      priority: 1
+    
+    brand_data:
+      keywords: ["brand"]
+      priority: 2
+    
+    store_data:
+      keywords: ["store"]
+      priority: 3
+    
+    employee_data:
+      keywords: ["employee"]
+      priority: 4
+    
+    category_data:
+      keywords: ["category"]
+      priority: 5
+  
+  value_based:
+    sales_data:
+      keywords: ["sales", "revenue"]
+      priority: 1
+    
+    target_data:
+      keywords: ["target"]
+      priority: 2
+    
+    year_comparison:
+      keywords: ["current year", "previous year"]
+      priority: 3
+
+# SP Output Classification
+sp_output_patterns:
+  monthly_trends:
+    required_columns: ["month", "currentyearsales"]
+    pattern_type: "time_series"
+    
+  weekly_trends:
+    required_columns: ["week", "currentyearsales"]
+    pattern_type: "time_series"
+    
+  weekday_weekend:
+    required_columns: ["daytype", "weekcategory", "sales"]
+    pattern_type: "categorical"
+    identifier_check: true
+    
+  product_sales:
+    required_columns: ["productname", "sales"]
+    pattern_type: "entity_sales"
+    
+  brand_sales:
+    required_columns: ["brandname", "sales"]
+    pattern_type: "entity_sales"
+    
+  store_sales:
+    required_columns: ["storename", "store", "sales"]
+    pattern_type: "entity_sales"
+    
+  employee_performance:
+    required_columns: ["employeename", "sales"]
+    pattern_type: "entity_sales"
+    
+  category_sales:
+    required_columns: ["categoryname", "category", "sales"]
+    pattern_type: "entity_sales"
+    
+  metric_value_pairs:
+    required_columns: ["metric", "excel value", "value"]
+    pattern_type: "key_value"
+
+# Data Formatting Rules
+formatting_rules:
+  key_generation:
+    standard: "{sheet_name} - {identifier}"
+    with_metric: "{sheet_name} - {identifier} {metric}"
+    with_target: "{sheet_name} - {identifier} Target"
+    time_series: "{sheet_name} - {identifier} {time_period}"
+  
+  value_cleaning:
+    remove_characters: [",", "$", "₹", "K", "M"]
+    decimal_places: 2
+    strip_whitespace: true
+  
+  identifier_normalization:
+    month_abbreviations:
+      "January": "Jan"
+      "February": "Feb"
+      "March": "Mar"
+      "April": "Apr"
+      "May": "May"
+      "June": "Jun"
+      "July": "Jul"
+      "August": "Aug"
+      "September": "Sep"
+      "October": "Oct"
+      "November": "Nov"
+      "December": "Dec"
+    
+    day_type_normalization:
+      uppercase: true
+      standard_values: ["WEEKDAY SALES", "WEEKEND SALES"]
+
+# Engine Performance Settings
+performance:
+  max_test_sps: 15
+  connection_timeout: 30
+  query_timeout: 120
+  max_retries: 3
+  batch_size: 100
+  
+  caching:
+    enabled: true
+    cache_duration: 300  # 5 minutes
+    max_cache_size: 1000
+  
+  parallel_processing:
+    enabled: true
+    max_workers: 4
+    chunk_size: 50
+
+# Error Handling
+error_handling:
+  fallback_to_legacy: true
+  log_classification_errors: true
+  log_formatting_errors: true
+  continue_on_sp_error: true
+  
+  retry_logic:
+    max_retries: 3
+    retry_delay: 1  # seconds
+    exponential_backoff: true
+
+# Debugging and Logging
+debugging:
+  log_sp_compatibility: true
+  log_pattern_matching: true
+  log_data_formatting: true
+  log_comparison_results: true
+  
+  verbose_output:
+    enabled: false
+    include_raw_data: false
+    include_formatted_keys: true
+    include_match_scores: true

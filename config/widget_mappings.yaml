@@ -1,0 +1,237 @@
+# Widget Mappings Configuration
+# This file contains widget-specific mappings and configurations
+
+# Widget Sheet Name Mappings
+widget_sheet_mappings:
+  # Landing page widgets
+  landing_page:
+    "Sales Summary_Top Stores by Sal": 
+      display_name: "Top Stores by Sales"
+      sheet_pattern: "top stores"
+      data_type: "store_sales"
+      has_targets: false
+    
+    "Sales Summary_Top Brands by Sal":
+      display_name: "Top Brands by Sales"
+      sheet_pattern: "brands"
+      data_type: "brand_sales"
+      has_targets: false
+    
+    "Sales Summary_Top Categories by":
+      display_name: "Top Categories by Sales"
+      sheet_pattern: "categories"
+      data_type: "category_sales"
+      has_targets: false
+    
+    "Sales Summary_Top Sub Categorie":
+      display_name: "Top Sub Categories by Sales"
+      sheet_pattern: "sub categories"
+      data_type: "subcategory_sales"
+      has_targets: false
+    
+    "Sales Summary_Top Products by S":
+      display_name: "Top Products by Sales"
+      sheet_pattern: "products"
+      data_type: "product_sales"
+      has_targets: false
+    
+    "Sales Summary_Weekly Trends":
+      display_name: "Weekly Trends"
+      sheet_pattern: "weekly trends"
+      data_type: "weekly_trends"
+      has_targets: false
+    
+    "Sales Summary_Store Sales with":
+      display_name: "Store Sales with Targets"
+      sheet_pattern: "store sales"
+      data_type: "store_sales"
+      has_targets: true
+
+  # Drillthrough widgets
+  drillthrough:
+    "Sales Summary_Sales Trends":
+      display_name: "Sales Trends"
+      sheet_pattern: "sales trends"
+      data_type: "monthly_trends"
+      drillthrough_type: "Love Library"
+    
+    "Sales Summary_Top Performing Employee":
+      display_name: "Top Performing Employee"
+      sheet_pattern: "employee"
+      data_type: "employee_performance"
+      drillthrough_type: "Love Library"
+    
+    "Sales Summary_Sales by Product":
+      display_name: "Sales by Product"
+      sheet_pattern: "product sales"
+      data_type: "product_sales"
+      drillthrough_type: "Love Library"
+    
+    "Sales Summary_Weekday Weekend":
+      display_name: "Weekday Weekend Sales"
+      sheet_pattern: "weekday weekend"
+      data_type: "weekday_weekend"
+      drillthrough_type: "Love Library"
+    
+    "Sales Summary_Weekwise Sales":
+      display_name: "Weekwise Sales"
+      sheet_pattern: "weekwise"
+      data_type: "weekly_comparison"
+      drillthrough_type: "Love Library"
+
+# Widget Data Structure Definitions
+widget_data_structures:
+  store_sales:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Store name or identifier"
+      - name: "Actual Sales"
+        type: "decimal"
+        description: "Actual sales amount"
+    key_format: "{sheet_name} - {identifier}"
+  
+  store_sales_with_targets:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Store name or identifier"
+      - name: "Metric"
+        type: "string"
+        description: "Metric type (Actual Sales or Target)"
+      - name: "Excel Value"
+        type: "decimal"
+        description: "Metric value"
+    key_format: "{sheet_name} - {identifier} {metric}"
+  
+  brand_sales:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Brand name"
+      - name: "Actual Sales"
+        type: "decimal"
+        description: "Brand sales amount"
+    key_format: "{sheet_name} - {identifier}"
+  
+  category_sales:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Category name"
+      - name: "Actual Sales"
+        type: "decimal"
+        description: "Category sales amount"
+    key_format: "{sheet_name} - {identifier}"
+  
+  product_sales:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Product name"
+      - name: "Actual Sales"
+        type: "decimal"
+        description: "Product sales amount"
+    key_format: "{sheet_name} - {identifier}"
+  
+  weekly_trends:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Week identifier"
+      - name: "Previous Year"
+        type: "decimal"
+        description: "Previous year sales"
+      - name: "Current Year"
+        type: "decimal"
+        description: "Current year sales"
+    key_format: "{sheet_name} - {identifier} {metric}"
+  
+  monthly_trends:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Month name"
+      - name: "Previous Year"
+        type: "decimal"
+        description: "Previous year sales"
+      - name: "Current Year"
+        type: "decimal"
+        description: "Current year sales"
+    key_format: "{sheet_name} - {identifier} {metric}"
+  
+  weekday_weekend:
+    columns:
+      - name: "Identifier/Label"
+        type: "string"
+        description: "Day type (WEEKDAY SALES or WEEKEND SALES)"
+      - name: "Metric"
+        type: "string"
+        description: "Metric type (Previous Year or Current Year)"
+      - name: "Excel Value"
+        type: "decimal"
+        description: "Sales value"
+    key_format: "{sheet_name} - {identifier} {metric}"
+  
+  employee_performance:
+    columns:
+      - name: "Identifier"
+        type: "string"
+        description: "Employee name"
+      - name: "Sales"
+        type: "decimal"
+        description: "Employee sales amount"
+    key_format: "{sheet_name} - {identifier}"
+
+# Widget Priority Order (for processing)
+widget_priority:
+  landing_page:
+    1: "Sales Summary_Weekly Trends"      # Simple time series
+    2: "Sales Summary_Top Products by S"  # Product list
+    3: "Sales Summary_Top Brands by Sal"  # Brand list
+    4: "Sales Summary_Top Categories by"  # Category list
+    5: "Sales Summary_Top Sub Categorie"  # Sub-category list
+    6: "Sales Summary_Top Stores by Sal"  # Store list
+    7: "Sales Summary_Store Sales with"   # Complex with targets
+  
+  drillthrough:
+    1: "Sales Summary_Weekday Weekend"    # Simple weekday/weekend
+    2: "Sales Summary_Weekwise Sales"     # Weekly comparison
+    3: "Sales Summary_Sales Trends"       # Monthly trends
+    4: "Sales Summary_Sales by Product"   # Product analysis
+    5: "Sales Summary_Top Performing Employee"  # Employee data
+
+# Widget Validation Rules
+widget_validation:
+  required_columns:
+    store_sales: ["Identifier", "Actual Sales"]
+    brand_sales: ["Identifier", "Actual Sales"]
+    category_sales: ["Identifier", "Actual Sales"]
+    product_sales: ["Identifier", "Actual Sales"]
+    weekly_trends: ["Identifier", "Previous Year", "Current Year"]
+    monthly_trends: ["Identifier", "Previous Year", "Current Year"]
+    weekday_weekend: ["Identifier/Label", "Metric", "Excel Value"]
+    employee_performance: ["Identifier", "Sales"]
+  
+  data_types:
+    identifier: "string"
+    sales: "decimal"
+    metric: "string"
+    year: "decimal"
+  
+  value_ranges:
+    sales:
+      min: 0
+      max: 999999999.99
+    year:
+      min: 2020
+      max: 2030
+
+# Widget Display Configuration
+widget_display:
+  decimal_places: 2
+  currency_symbol: "$"
+  thousands_separator: ","
+  null_display: "N/A"
+  error_display: "Error"
+  not_found_display: "Not Found"

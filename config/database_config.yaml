@@ -1,0 +1,215 @@
+# Database Configuration
+# This file contains database connection and query configurations
+
+# Connection Settings
+database:
+  connection:
+    # Connection details are loaded from .env file
+    use_environment_variables: true
+    connection_timeout: 30
+    command_timeout: 120
+    retry_attempts: 3
+    retry_delay: 2  # seconds
+  
+  # Connection Pool Settings
+  pool:
+    min_connections: 1
+    max_connections: 10
+    connection_lifetime: 300  # 5 minutes
+    idle_timeout: 60  # 1 minute
+
+# Query Execution Settings
+query_execution:
+  # Parameter Formats
+  parameter_formats:
+    named_parameters:
+      enabled: true
+      format: "@{parameter_name}=?"
+      preferred: true
+    
+    positional_parameters:
+      enabled: true
+      format: "?"
+      fallback: true
+  
+  # Query Timeouts
+  timeouts:
+    default: 30
+    long_running: 120
+    bulk_operations: 300
+  
+  # Retry Logic
+  retry:
+    max_attempts: 3
+    retry_delay: 1
+    exponential_backoff: true
+    retry_on_timeout: true
+    retry_on_connection_error: true
+
+# Stored Procedure Execution
+stored_procedures:
+  # Execution Method
+  execution:
+    prefer_named_parameters: true
+    fallback_to_positional: true
+    log_execution_method: true
+  
+  # Parameter Validation
+  parameter_validation:
+    validate_types: true
+    validate_ranges: true
+    allow_null_values: true
+    log_validation_errors: true
+  
+  # Result Processing
+  result_processing:
+    fetch_all_rows: true
+    include_column_metadata: true
+    convert_decimals: true
+    handle_null_values: true
+
+# Data Type Mappings
+data_types:
+  # SQL Server to Python mappings
+  sql_to_python:
+    "int": "int"
+    "bigint": "int"
+    "decimal": "float"
+    "numeric": "float"
+    "float": "float"
+    "real": "float"
+    "varchar": "str"
+    "nvarchar": "str"
+    "char": "str"
+    "nchar": "str"
+    "text": "str"
+    "ntext": "str"
+    "datetime": "datetime"
+    "datetime2": "datetime"
+    "date": "date"
+    "time": "time"
+    "bit": "bool"
+  
+  # Default values for null handling
+  null_defaults:
+    "int": 0
+    "float": 0.0
+    "str": ""
+    "bool": false
+    "datetime": null
+    "date": null
+    "time": null
+
+# Query Optimization
+optimization:
+  # Query Hints
+  query_hints:
+    use_index_hints: false
+    force_order: false
+    max_degree_of_parallelism: 0
+  
+  # Execution Plans
+  execution_plans:
+    cache_plans: true
+    recompile_threshold: 10
+    statistics_update: "auto"
+  
+  # Performance Monitoring
+  monitoring:
+    log_slow_queries: true
+    slow_query_threshold: 5  # seconds
+    log_execution_time: true
+    track_row_counts: true
+
+# Security Settings
+security:
+  # SQL Injection Prevention
+  sql_injection:
+    use_parameterized_queries: true
+    validate_input: true
+    escape_special_characters: true
+    block_dynamic_sql: true
+  
+  # Access Control
+  access_control:
+    require_authentication: true
+    validate_permissions: true
+    log_access_attempts: true
+  
+  # Data Protection
+  data_protection:
+    encrypt_sensitive_data: false
+    mask_pii_in_logs: true
+    audit_data_access: true
+
+# Error Handling
+error_handling:
+  # Database Errors
+  database_errors:
+    log_all_errors: true
+    include_stack_trace: true
+    retry_on_transient_errors: true
+    
+    transient_error_codes:
+      - 2  # Timeout
+      - 53  # Network error
+      - 121  # Semaphore timeout
+      - 1205  # Deadlock
+      - 1222  # Lock request timeout
+  
+  # Connection Errors
+  connection_errors:
+    auto_reconnect: true
+    max_reconnect_attempts: 5
+    reconnect_delay: 5  # seconds
+    log_connection_issues: true
+  
+  # Query Errors
+  query_errors:
+    continue_on_error: false
+    log_failed_queries: true
+    include_parameters: true
+    sanitize_sensitive_data: true
+
+# Logging Configuration
+logging:
+  # Database Operations
+  database_operations:
+    log_connections: true
+    log_disconnections: true
+    log_query_execution: true
+    log_parameter_values: false  # Set to false for security
+  
+  # Performance Metrics
+  performance_metrics:
+    log_execution_times: true
+    log_row_counts: true
+    log_memory_usage: false
+    log_cpu_usage: false
+  
+  # Debug Information
+  debug:
+    log_sql_statements: false  # Set to true only for debugging
+    log_result_sets: false
+    log_connection_strings: false  # Never log connection strings
+    verbose_error_messages: true
+
+# Maintenance Settings
+maintenance:
+  # Connection Cleanup
+  cleanup:
+    close_idle_connections: true
+    idle_timeout: 300  # 5 minutes
+    cleanup_interval: 60  # 1 minute
+  
+  # Statistics Updates
+  statistics:
+    auto_update_statistics: true
+    update_threshold: 0.2  # 20% data change
+    sample_percentage: 10
+  
+  # Index Maintenance
+  indexes:
+    auto_rebuild_fragmented: false
+    fragmentation_threshold: 30  # percent
+    rebuild_online: true

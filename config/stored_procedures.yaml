@@ -1,0 +1,157 @@
+# Stored Procedures Configuration
+# This file contains all stored procedure definitions and mappings
+
+# Landing Page Widget Stored Procedures
+landing_page_widgets:
+  "Sales Summary_Top Stores by Sal": "SP_TopStoresbySales"
+  "Sales Summary_Top Brands by Sal": "SP_TopBrandsBySales"
+  "Sales Summary_Top Categories by": "SP_TopCategoriesBySaleswidget"
+  "Sales Summary_Top Sub Categorie": "SP_TopSubCategoriesBySales"
+  "Sales Summary_Top Products by S": "SP_TopProductsBySaleswidget"
+  "Sales Summary_Weekly Trends": "SP_WeeklyTrendswidget"
+  "Sales Summary_Store Sales with": "SP_StorewiseActualVsTarget_Vertical_SortedByActual"
+
+# Landing Page KPI Stored Procedures
+landing_page_kpis:
+  "Total Sales": "N_GetFilteredSalesData"
+  "Total Units Sold": "SP_TotalUnitsSoldkpi"
+  "Avg. Bill Value": "SP_AvgBillValue"
+  "Avg. Daily Sales": "SP_AvgDailySalesKPI"
+  "New Customers": "SP_NewCustomersKPI"
+
+# Drillthrough KPI Stored Procedures (First Level)
+drillthrough_kpis:
+  "Total Sales": "DR_Totalsaleskpi"
+  "Total Units Sold": "DR_TotalUnitsSoldKPI"
+  "Avg. Bill Value": "DR_avgbillvalue"
+  "Total No. of Bills": "DR_Totalnobillsa"
+  "Total Customers": "DR_totalcustomers"
+
+# Drillthrough Specific Stored Procedures
+drillthrough_procedures:
+  # Store-based drillthrough (Love Library - Store 717)
+  love_library:
+    sales_trends: "SP_SalesTrend"
+    top_performing_employee: "SP_TopPerformingEmployee"
+    sales_by_product: "SP_TopProductsBySales"
+    weekday_weekend: "SP_WeekdayWeekendSales"
+    weekwise_sales: "SP_WeekwiseSalesComparison"
+
+  # Brand-based drillthrough (Routledge Publications)
+  routledge_publications:
+    brand_performance: "SP_TopBrandsBySales"
+    brand_trends: "SP_BrandTrends"
+    brand_products: "SP_BrandProductAnalysis"
+
+  # Category-based drillthrough (E-Books)
+  e_books:
+    category_performance: "SP_TopCategoriesBySaleswidget"
+    category_trends: "SP_CategoryTrends"
+    category_products: "SP_CategoryProductAnalysis"
+
+  # Sub-category drillthrough (Non-Fiction)
+  non_fiction:
+    subcategory_performance: "SP_TopSubCategoriesBySales"
+    subcategory_trends: "SP_SubCategoryTrends"
+
+  # Product-based drillthrough (MATLAB)
+  matlab:
+    product_performance: "SP_TopProductsBySales"
+    product_trends: "SP_ProductTrends"
+    product_details: "SP_ProductDetailAnalysis"
+
+# Dynamic Engine Available Stored Procedures
+dynamic_engine_sps:
+  # Widget SPs
+  - "SP_SalesTrend"
+  - "SP_TopPerformingEmployee"
+  - "SP_TopProductsBySales"
+  - "SP_WeekdayWeekendSales"
+  - "SP_WeekwiseSalesComparison"
+  - "SP_TopStoresbySales"
+  - "SP_TopBrandsBySales"
+  - "SP_TopCategoriesBySaleswidget"
+  - "SP_TopSubCategoriesBySales"
+  - "SP_WeeklyTrendswidget"
+  - "SP_StorewiseActualVsTarget_Vertical_SortedByActual"
+  # Landing Page KPI SPs
+  - "N_GetFilteredSalesData"
+  - "SP_TotalUnitsSoldkpi"
+  - "SP_AvgBillValue"
+  - "SP_AvgDailySalesKPI"
+  - "SP_NewCustomersKPI"
+  # Drillthrough KPI SPs
+  - "DR_Totalsaleskpi"
+  - "DR_TotalUnitsSoldKPI"
+  - "DR_avgbillvalue"
+  - "DR_Totalnobillsa"
+  - "DR_totalcustomers"
+
+# Stored Procedure Parameter Formats
+parameter_formats:
+  standard_format:
+    - "@Year"
+    - "@Month"
+    - "@Store"
+    - "@State"
+    - "@Channel"
+    - "@FromDate"
+    - "@ToDate"
+
+  named_parameters: true
+  positional_fallback: true
+
+# Stored Procedure Return Formats
+return_formats:
+  monthly_trends:
+    columns: ["Month", "CurrentYearSales", "PreviousYearSales"]
+    pattern: "monthly_trends"
+
+  weekly_trends:
+    columns: ["Week", "CurrentYearSales", "PreviousYearSales"]
+    pattern: "weekly_trends"
+
+  weekday_weekend:
+    columns: ["WeekCategory", "CurrentYearSales", "PreviousYearSales"]
+    pattern: "weekday_weekend"
+    identifier_values: ["WEEKDAY SALES", "WEEKEND SALES"]
+
+  product_sales:
+    columns: ["ProductName", "Sales"]
+    pattern: "product_sales"
+
+  brand_sales:
+    columns: ["BrandName", "Sales"]
+    pattern: "brand_sales"
+
+  store_sales:
+    columns: ["Identifier", "Actual Sales"]
+    pattern: "store_sales"
+
+  employee_performance:
+    columns: ["EmployeeName", "Sales"]
+    pattern: "employee_performance"
+
+  metric_value_pairs:
+    columns: ["Identifier", "Metric", "Excel Value"]
+    pattern: "metric_value_pairs"
+
+  category_sales:
+    columns: ["CategoryName", "Sales"]
+    pattern: "category_sales"
+
+  # KPI Return Formats
+  kpi_single_value:
+    columns: ["Value"]
+    pattern: "kpi_single_value"
+    description: "Single KPI value (Total Sales, Units Sold, etc.)"
+
+  kpi_with_metadata:
+    columns: ["KPI_Name", "Value", "Period"]
+    pattern: "kpi_with_metadata"
+    description: "KPI with additional metadata"
+
+  kpi_comparison:
+    columns: ["Current_Value", "Previous_Value", "Change_Percent"]
+    pattern: "kpi_comparison"
+    description: "KPI with comparison data"
