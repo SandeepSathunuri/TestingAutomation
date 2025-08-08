@@ -273,12 +273,23 @@ class WidgetMenuHandler:
                 print(f"   {i+1}. (could not read item: {debug_error})")
         
         # Try to find and click the specific menu item
-        for attempt in range(5):  # Increased attempts for landing page
+        for attempt in range(3):  # Reduced attempts to prevent hanging
             try:
                 print(f"🔄 Attempt {attempt + 1} to click '{label}'")
                 
                 # Refresh the menu items list to avoid stale elements
                 menu_items = self.driver.find_elements(By.CSS_SELECTOR, ".mat-menu-item")
+                
+                # Quick check: if no items are visible, don't waste time
+                visible_items = [item for item in menu_items if item.is_displayed()]
+                if not visible_items:
+                    print(f"⚠️ No visible menu items found on attempt {attempt + 1}")
+                    if attempt < 2:  # Not last attempt
+                        time.sleep(0.5)
+                        continue
+                    else:
+                        print("❌ All menu items are invisible - menu is broken")
+                        return False
                 
                 # Look for the specific item by text with multiple matching strategies
                 target_item = None
@@ -333,9 +344,17 @@ class WidgetMenuHandler:
                         try:
                             print(f"   🔄 Trying {approach_name}")
                             
-                            # Ensure element is still valid
-                            if not target_item.is_displayed() or not target_item.is_enabled():
-                                print(f"   ⚠️ Element not clickable: displayed={target_item.is_displayed()}, enabled={target_item.is_enabled()}")
+                            # Ensure element is still valid - quick timeout prevention
+                            try:
+                                is_displayed = target_item.is_displayed()
+                                is_enabled = target_item.is_enabled()
+                                
+                                if not is_displayed or not is_enabled:
+                                    print(f"   ⚠️ Element not clickable: displayed={is_displayed}, enabled={is_enabled}")
+                                    continue
+                                    
+                            except Exception as element_check_error:
+                                print(f"   ❌ Element check failed: {str(element_check_error)[:30]}...")
                                 continue
                             
                             click_func()
@@ -1007,9 +1026,9 @@ class WidgetMenuHandler:
         
         # Different order based on page type
         if page_type == "landing":
-            print("🎯 Landing page: Expand first, then Download")
+            print("🎯 Landing page: Expand first, then Download (separate sessions)")
             
-            # Step 1: Handle Expand first (menu stays open better)
+            # Step 1: Handle Expand first
             print("🔄 Step 1: Handling Expand...")
             if self.click_menu_item("Expand", page_type):
                 print("✅ Expand menu item clicked successfully")
@@ -1024,20 +1043,10 @@ class WidgetMenuHandler:
             else:
                 print("❌ Failed to click Expand menu item")
             
-            # Step 2: Handle Download (check if menu is still open)
-            print("🔄 Step 2: Handling Download...")
-            menu_items = self.driver.find_elements(By.CSS_SELECTOR, ".mat-menu-item")
-            if menu_items:
-                if self.click_menu_item("Download", page_type):
-                    print("✅ Download initiated successfully")
-                    download_success = True
-                    time.sleep(1)  # Wait for download to start
-                else:
-                    print("❌ Failed to click Download menu item")
-            else:
-                print("⚠️ Menu closed after expand, trying to reopen for download...")
-                # Try to reopen menu for download - this will be handled by the calling code
-                print("⚠️ Download will need separate menu session")
+            # Step 2: Skip download in same session (menu is broken after modal)
+            print("🔄 Step 2: Skipping download in same session (menu broken after modal)")
+            print("⚠️ Download will be handled in separate menu session")
+            # Don't attempt download here - always use separate session for landing page
         
         else:
             print("🎯 Drillthrough page: Download first, then Expand (original order)")

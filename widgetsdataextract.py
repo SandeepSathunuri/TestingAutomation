@@ -111,17 +111,19 @@ class WidgetExtractor:
                 if self.menu_handler.click_widget_menu(widget):
                     download_success, expand_success = self.menu_handler.handle_both_operations(page_type)
                     
-                    # Special handling for landing page where download might need separate session
-                    if page_type == "landing" and expand_success and not download_success:
-                        print(f"🔄 Landing page: Expand succeeded, trying separate download session for: {title}")
+                    # Special handling for landing page - always use separate download session
+                    if page_type == "landing" and expand_success:
+                        print(f"🔄 Landing page: Expand succeeded, using separate download session for: {title}")
                         
-                        # Wait a moment and try download in separate menu session
-                        time.sleep(2)  # Longer wait for landing page
+                        # Wait for page to stabilize after modal close
+                        time.sleep(2)
                         widget = self._find_fresh_widget(widget, title)
                         
-                        # Try up to 2 times for separate download
+                        # Try separate download session
                         for download_attempt in range(2):
                             try:
+                                print(f"🔄 Separate download attempt {download_attempt + 1} for: {title}")
+                                
                                 if self.menu_handler.click_widget_menu(widget):
                                     if self.menu_handler.handle_download():
                                         download_success = True
